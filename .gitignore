@@ -1,2 +1,8 @@
 # idea folder intellij
 .idea
+
+# Don't include compiled classes
+*.class
+
+# or JAR files
+*.jar
