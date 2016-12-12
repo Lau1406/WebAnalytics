@@ -16,16 +16,15 @@ public class Record {
 
         for (int n = 0; n < attributes.size(); n += 1) {
             String value = values.get(n);
-            // dont insert null values
-            if (!value.equals("?")) {
-                this.attributes.put(attributes.get(n), value);
-            }
+            this.attributes.put(attributes.get(n), value);
         }
     }
 
     public String get(String key) {
         return this.attributes.get(key);
     }
+
+    public Map<String, String> getAttributes() { return this.attributes; }
 
     @Override
     public String toString() {

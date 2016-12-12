@@ -1,4 +1,6 @@
+import data.Filter;
 import data.Importer;
+import data.Record;
 import data.RecordSet;
 
 import java.io.IOException;
@@ -22,7 +24,8 @@ public class Main {
 
         // 1. print a record (note; attributes order is semi-random, due to using a HashMap)
         System.out.println("Here's record number 13:");
-        System.out.println(recordSet.getRecords().get(13))
+        System.out.println(recordSet.getRecords().get(13));
+        System.out.println();
 
         // 2. get possible values of an attribute
         String fieldName = "gender";
@@ -31,6 +34,17 @@ public class Main {
         for (String value : possibleValues) {
             System.out.println("- " + value);
         }
+        System.out.println();
+
+        // 3. filter record set
+        RecordSet filteredSet = RecordSet.filter(recordSet, new Filter() {
+            @Override
+            public boolean filterRecord(Record record) {
+                return record.get("gaming").equals("10");
+            }
+        });
+        System.out.println("Only " + filteredSet.getRecords().size() + " records have gaming=10");
+        System.out.println();
     }
 
     private void importData() {

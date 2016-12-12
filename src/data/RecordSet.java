@@ -49,7 +49,7 @@ public class RecordSet {
     }
 
     /**
-     * Add a record to the record set with the specified attributeValues and values.
+     * Add a record to the record set with the specified attributeValues and values
      * @param attributes attributeValues of the record
      * @param values values of the record
      */
@@ -59,6 +59,28 @@ public class RecordSet {
         }
 
         this.records.add(new Record(attributes, values));
+    }
+
+    /**
+     * Add a record to the record set and update attributeValues
+     * @param record record to add
+     */
+    public void addRecord(Record record) {
+        for (Map.Entry<String,String> attribute : record.getAttributes().entrySet()) {
+            registerPossibleValue(attribute.getKey(), attribute.getValue());
+        }
+
+        this.records.add(record);
+    }
+
+    /**
+     * Add multiple records to the record set
+     * @param records a list of records to add
+     */
+    private void addRecords(List<Record> records) {
+        for (Record record : records) {
+            addRecord(record);
+        }
     }
 
     /**
@@ -94,5 +116,20 @@ public class RecordSet {
      */
     public static RecordSet copy(RecordSet copyFrom) {
         return new RecordSet(copyFrom);
+    }
+
+    /**
+     * Filter a record set and return the new, filtered record set
+     * @param filterFrom record set to filter from
+     * @param filter filter to apply
+     * @return filtered record set
+     */
+    public static RecordSet filter(RecordSet filterFrom, Filter filter) {
+        List<Record> recordsToFilter = filterFrom.getRecords();
+        List<Record> filteredRecords = filter.applyFilter(recordsToFilter);
+
+        RecordSet recordSet = new RecordSet();
+        recordSet.addRecords(filteredRecords);
+        return recordSet;
     }
 }
