@@ -18,7 +18,7 @@ public class Main {
     }
 
     private void run() {
-        importData();
+        importData(true);
 
         // usage examples:
 
@@ -47,7 +47,7 @@ public class Main {
         System.out.println();
     }
 
-    private void importData() {
+    private void importData(boolean doPrintToConsole) {
         Importer importer = new Importer();
 
         long startTime = System.nanoTime();
@@ -60,7 +60,9 @@ public class Main {
 
         long endTime = System.nanoTime();
 
-        System.out.println(recordSet.getRecords().size() + " records loaded (took " + (endTime - startTime) / 1000000000.0 + " seconds)");
-        System.out.println();
+        if (doPrintToConsole) {
+            System.out.println(recordSet.getRecords().size() + " records loaded (took " + (endTime - startTime) / 1000000000.0 + " seconds)");
+            System.out.println();
+        }
     }
 }
