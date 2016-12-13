@@ -21,5 +21,10 @@ public abstract class BinarySubgroupQualityMeasure {
         this.originalPositives = this.originalset.filteredCount(positiveFilter);
     }
     
+    /**
+     * Get quality measure score regarding given subgroup
+     * @param subGroup
+     * @return float score
+     */
     public abstract float getScore(RecordSet subGroup);
 }
