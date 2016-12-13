@@ -1,9 +1,9 @@
 package HW2;
 
-import data.BinarySubgroupQualityMeasure;
 import data.Filter;
 import data.Record;
 import data.RecordSet;
+import data.WeightedRelativeAccuracy;
 
 /**
  *
@@ -16,18 +16,12 @@ public class Exercise1a extends Exercise {
         RecordSet filteredSet = RecordSet.filter(recordSet, new Filter() {
             @Override
             public boolean filterRecord(Record record) {
-                return record.get("gaming").equals("10");
+                return record.get("importance_same_race").equals("1");
             }
         });
         
-        BinarySubgroupQualityMeasure qm = new BinarySubgroupQualityMeasure(recordSet, filteredSet, new MatchFilter()) {
-
-            @Override
-            public float getScore() {
-                //for now
-                return 0;
-            }
-        };
+        WeightedRelativeAccuracy qm = new WeightedRelativeAccuracy(recordSet, filteredSet, new MatchFilter());
         System.out.println(qm);
+        System.out.println(qm.getScore());
     }
 }
