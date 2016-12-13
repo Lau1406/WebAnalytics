@@ -6,7 +6,7 @@ import java.util.Set;
 import javafx.util.Pair;
 
 /**
- *
+ * Class to find a subgroup that maximized a given quality measure
  * @author sjef
  */
 public class FindSubGroup {
@@ -14,13 +14,20 @@ public class FindSubGroup {
     protected BinarySubgroupQualityMeasure qualityMeasure;
     protected ArrayList<String> excludedAttributes;
     protected int depthmax = 2;
-    protected float iterateThreshhold = 0;
+    protected float iterateThreshhold ;
     
-    public FindSubGroup(RecordSet recordSet, BinarySubgroupQualityMeasure qualityMeasure)
+    /**
+     * 
+     * @param recordSet the set to find subgroups in
+     * @param qualityMeasure the quality measure
+     * @param iterateThreshhold if the quality measure score is below this value don't continue on that path 
+     */
+    public FindSubGroup(RecordSet recordSet, BinarySubgroupQualityMeasure qualityMeasure, float iterateThreshhold)
     {
         this.recordSet = recordSet;
         this.qualityMeasure = qualityMeasure;
         this.excludedAttributes = new ArrayList<String>();
+        this.iterateThreshhold = iterateThreshhold;
     }
     
     public void excludeAttribute(String attr){

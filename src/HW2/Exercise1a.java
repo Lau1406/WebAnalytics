@@ -22,13 +22,13 @@ public class Exercise1a extends Exercise {
         });
         
         WeightedRelativeAccuracy qm = new WeightedRelativeAccuracy(recordSet, new MatchFilter());
-        FindSubGroup fs = new FindSubGroup(recordSet, qm);
+        FindSubGroup fs = new FindSubGroup(recordSet, qm, 0);
         fs.excludeAttribute("match");
         fs.excludeAttribute("decision");
         fs.excludeAttribute("decision_o");
-        fs.excludeAttribute("d_guess_prob_liked");
+        //fs.excludeAttribute("d_guess_prob_liked");
         
-        //fs.run();
+        fs.run();
         //System.out.println(qm.getScore(filteredSet));
         
     }
