@@ -14,7 +14,35 @@ public class Main {
     private RecordSet recordSet;
 
     public static void main(String[] args) {
-        new Main().run();
+        if(args.length > 0){
+            new Main().exercise(args[0]);
+        } else {
+            new Main().run();
+        }
+    }
+    
+    private void exercise(String identifier){
+        this.importData(true);
+        HW2.Exercise e;
+        switch(identifier){
+            case "1a":
+                e = new HW2.Exercise1a();
+                break;
+            case "1b":
+                e = new HW2.Exercise1b();
+                break;
+            case "1c":
+                e = new HW2.Exercise1c();
+                break;
+            case "1d":
+                e = new HW2.Exercise1d();
+                break;
+            default:
+                System.out.println("Unknown exercise identifier");
+                return;
+        }
+        e.setRecordSet(this.recordSet);
+        e.run();
     }
 
     private void run() {
