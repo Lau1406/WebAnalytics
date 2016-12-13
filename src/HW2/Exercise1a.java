@@ -20,8 +20,7 @@ public class Exercise1a extends Exercise {
             }
         });
         
-        WeightedRelativeAccuracy qm = new WeightedRelativeAccuracy(recordSet, filteredSet, new MatchFilter());
-        System.out.println(qm);
-        System.out.println(qm.getScore());
+        WeightedRelativeAccuracy qm = new WeightedRelativeAccuracy(recordSet, new MatchFilter());
+        System.out.println(qm.getScore(filteredSet));
     }
 }
