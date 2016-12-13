@@ -27,4 +27,8 @@ public abstract class BinarySubgroupQualityMeasure {
      * @return float score
      */
     public abstract float getScore(RecordSet subGroup);
+    
+    public float getScore(Filter filter){
+        return this.getScore(RecordSet.filter(originalset, filter));
+    }
 }

@@ -34,9 +34,14 @@ public class FindSubGroup {
         this.excludedAttributes.add(attr);
     }
     
-    public void run(){
-        Pair<Float, String>  r = this.iterate(0, Float.NEGATIVE_INFINITY, this.recordSet, "");
+    public void run(Filter initial_filter){
+        RecordSet subset = RecordSet.filter(this.recordSet, initial_filter);
+        Pair<Float, String>  r = this.iterate(0, this.qualityMeasure.getScore(subset), subset, "");
         System.out.println("Best with " + r.getValue() + "-> " + Float.toString(r.getKey()));
+    }
+    
+    public void run(){
+        this.run(new Unfiltered());
     }
     
     public Pair<Float,String> iterate(int depth, float maxscore, RecordSet subgroup, String qualifier){
@@ -67,9 +72,10 @@ public class FindSubGroup {
                     maxscore = score;
                     bestq = newq;
                 }
+                if(depth == 0)
+                    System.out.println(Float.toString(score) + ","+ newq+"," + Integer.toString(n) + "/" +Integer.toString(l));
             }
-            if(depth == 0)
-                System.out.println(Integer.toString(++n) + "/" +Integer.toString(l) + " " + bestq + "->"+ maxscore);
+            n++;
         }
         
         return new Pair<Float,String>(maxscore, bestq);
