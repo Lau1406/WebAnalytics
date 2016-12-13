@@ -108,6 +108,15 @@ public class RecordSet {
 
         possibleAttributeValues.add(value);
     }
+    
+    /**
+     * Count the number of records in the current RecordSet that satisfy the given filter
+     * @param filter filter to apply
+     * @return number of records satisfying the given filter
+     */
+    public int filteredCount(Filter filter){
+        return filter.applyFilterCount(this.getRecords());
+    }
 
     /**
      * Copy the record set and return a new record set
@@ -117,7 +126,7 @@ public class RecordSet {
     public static RecordSet copy(RecordSet copyFrom) {
         return new RecordSet(copyFrom);
     }
-
+    
     /**
      * Filter a record set and return the new, filtered record set
      * @param filterFrom record set to filter from

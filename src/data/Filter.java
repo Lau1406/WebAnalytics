@@ -24,6 +24,23 @@ public abstract class Filter {
 
         return filteredRecords;
     }
+    
+    /**
+     * Applies a filter to a list of records and returns the number of items that satisfy this filter
+     * @param recordsToCount
+     * @return the number of records that satisfy the filter
+     */
+    public int applyFilterCount(List<Record> recordsToCount){
+        int n = 0;
+
+        for (Record record : recordsToCount) {
+            if (filterRecord(record)) {
+                n++;
+            }
+        }
+        
+        return n;
+    }
 
     /**
      * Filter a record in a dataset
