@@ -1,10 +1,8 @@
-import data.Filter;
 import data.Importer;
-import data.Record;
 import data.RecordSet;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.Scanner;
 
 /**
  * Created by Laurence on 2016-12-12.
@@ -46,33 +44,12 @@ public class Main {
     }
 
     private void run() {
-        importData(true);
+        Scanner scanner = new Scanner(System.in);
 
-        // usage examples:
+        System.out.println("Which exercise do you want to execute? (e.g. '1a')");
+        String identifier = scanner.nextLine().trim();
 
-        // 1. print a record (note; attributes order is semi-random, due to using a HashMap)
-        System.out.println("Here's record number 13:");
-        System.out.println(recordSet.getRecords().get(13));
-        System.out.println();
-
-        // 2. get possible values of an attribute
-        String fieldName = "gender";
-        System.out.println("Possible values for field '" + fieldName + "':");
-        Set<String> possibleValues = recordSet.getPossibleValues(fieldName);
-        for (String value : possibleValues) {
-            System.out.println("- " + value);
-        }
-        System.out.println();
-
-        // 3. filter record set
-        RecordSet filteredSet = RecordSet.filter(recordSet, new Filter() {
-            @Override
-            public boolean filterRecord(Record record) {
-                return record.get("gaming").equals("10");
-            }
-        });
-        System.out.println("Only " + filteredSet.getRecords().size() + " records have gaming=10");
-        System.out.println();
+        exercise(identifier);
     }
 
     private void importData(boolean doPrintToConsole) {
