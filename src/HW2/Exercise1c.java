@@ -17,7 +17,7 @@ public class Exercise1c extends Exercise  {
     @Override
     public void run() {
         System.out.println("Exercise 1c");
-        float threshold = 0.8f;
+        float threshold = 0.75f;
 
         // Brute force
         sensitivities = new ArrayList<>();
