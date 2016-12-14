@@ -42,6 +42,18 @@ public class Exercise1c extends Exercise  {
                 sensitivities.add(sensitivity);
                 if (sensitivity > threshold) {
                     System.out.println("High attribute value combo: " + s + ":" + value + ":" + sensitivity);
+                    System.out.println("Positives:" + RecordSet.filter(recordSet, new Filter() {
+                        @Override
+                        public boolean filterRecord(Record record) {
+                            return record.get(s).equals(value) && record.get("match").equals("1");
+                        }
+                    }).getRecords().size());
+                    System.out.println("Negatives:" + RecordSet.filter(recordSet, new Filter() {
+                        @Override
+                        public boolean filterRecord(Record record) {
+                            return record.get(s).equals(value) && record.get("match").equals("0");
+                        }
+                    }).getRecords().size());
                 }
                 if (sensitivity >= highestSansitivity) {
                     highestSansitivity = sensitivity;
