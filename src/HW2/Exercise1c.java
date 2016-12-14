@@ -31,12 +31,14 @@ public class Exercise1c extends Exercise  {
 
 
         for (String s : attr) {
-            // attribute 'match' gives 1 for obvious reasons, we skip this one
-            if (s.equals("match")) continue;
+            // attribute 'match' gives 1 for obvious reasons, we skip this one. has_null gives no useful information
+            if (s.equals("match") || s.equals("has_null")) continue;
             // Loop over all attributes
             values.clear();
             values.addAll(recordSet.getAttributeValues().get(s));
             for (String value : values) {
+                // Skip if the value is unknown
+                if (value.equals("?")) continue;
                 // Loop over all possible values
                 float sensitivity = genSensitivity(recordSet, s, value);
                 sensitivities.add(sensitivity);
