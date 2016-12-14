@@ -17,6 +17,7 @@ public class Exercise1c extends Exercise  {
     @Override
     public void run() {
         System.out.println("Exercise 1c");
+        float threshold = 0.8f;
 
         // Brute force
         sensitivities = new ArrayList<>();
@@ -39,6 +40,9 @@ public class Exercise1c extends Exercise  {
                 // Loop over all possible values
                 float sensitivity = genSensitivity(recordSet, s, value);
                 sensitivities.add(sensitivity);
+                if (sensitivity > threshold) {
+                    System.out.println("High attribute value combo: " + s + ":" + value + ":" + sensitivity);
+                }
                 if (sensitivity >= highestSansitivity) {
                     highestSansitivity = sensitivity;
                     highestAttribute = s;
