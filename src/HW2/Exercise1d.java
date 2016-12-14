@@ -63,6 +63,8 @@ public class Exercise1d extends Exercise  {
         System.out.println(qm.getScore(sharedint));
         System.out.println(qm.getScore(attr_like));
         System.out.println(qm.getScore(prob));
+        System.out.println(qm.getScore(best));
+        System.out.println(qm.getScore(new Unfiltered()));
     }
     
 }
