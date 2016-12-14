@@ -17,4 +17,5 @@
 
 NB: valid exercise identifiers are `1a`, `1b`, `1c`, `1d`
 
+NB2: We have downloaded the dataset, it needs to be present in the `data` folder as a file named `dataset` in it's original format. 
 
