@@ -4,7 +4,7 @@ package data;
  * Class to measure the quality of a subgroup.
  * @author sjef
  */
-public abstract class BinarySubgroupQualityMeasure {
+public abstract class BinarySubgroupQualityMeasure implements QualityMeasure{
     protected RecordSet originalset;
     protected int originalPositives;
     protected Filter positiveFilter;
@@ -28,7 +28,9 @@ public abstract class BinarySubgroupQualityMeasure {
      */
     public abstract float getScore(RecordSet subGroup);
     
+    @Override
     public float getScore(Filter filter){
-        return this.getScore(RecordSet.filter(originalset, filter));
+        RecordSet subgroup = RecordSet.filter(originalset, filter);
+        return this.getScore(subgroup);
     }
 }
