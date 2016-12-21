@@ -29,29 +29,29 @@ public class Main {
         switch (identifier) {
             case "3":
                 //BeamSearch.beamSearch(recordSet, null, identifier, 1, 1, 3, null);
-                this.importData(true);
+                this.importData("data/hw3/dataset_java_readable.csv",true);
                 PerformBeamSearch.run(this.recordSet);
                 break;
             case "2.1a":
-                this.importData(true);
+                this.importData("data/dataset",true);
                 e = new HW2.Exercise1a();
                 e.setRecordSet(this.recordSet);
                 e.run();
                 break;
             case "2.1b":
-                this.importData(true);
+                this.importData("data/dataset",true);
                 e = new HW2.Exercise1b();
                 e.setRecordSet(this.recordSet);
                 e.run();
                 break;
             case "2.1c":
-                this.importData(true);
+                this.importData("data/dataset",true);
                 e = new HW2.Exercise1c();
                 e.setRecordSet(this.recordSet);
                 e.run();
                 break;
             case "2.1d":
-                this.importData(true);
+                this.importData("data/dataset",true);
                 e = new HW2.Exercise1d();
                 e.setRecordSet(this.recordSet);
                 e.run();
@@ -71,13 +71,13 @@ public class Main {
         exercise(identifier);
     }
 
-    private void importData(boolean doPrintToConsole) {
+    private void importData(String path,boolean doPrintToConsole) {
         Importer importer = new Importer();
 
         long startTime = System.nanoTime();
 
         try {
-            recordSet = importer.loadFromFile("data/dataset");
+            recordSet = importer.loadFromFile(path);
         } catch (IOException e) {
             throw new RuntimeException("Importer caused exception", e);
         }

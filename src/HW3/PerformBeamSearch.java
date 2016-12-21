@@ -1,21 +1,16 @@
 
 package HW3;
 
-import HW2.MatchFilter;
 import data.AttributeEqualsFilterGenerator;
-import data.AttributeFilter;
 import data.BeamSearch;
 import data.Constraints;
 import data.Filter;
 import data.FilterGenerator;
-import data.LinkedFilter;
 import data.MaxSizePriorityQueue;
-import data.LooseConstraints;
-import data.NoDuplicatesConstraint;
-import data.QualityMeasure;
+import data.MeanDifferenceModelClass;
+import data.NormalizedMeanDifferenceQualityMeasure;
 import data.RecordSet;
-import data.Unfiltered;
-import data.WeightedRelativeAccuracy;
+import data.SetSizeConstraint;
 import java.util.Map;
 import java.util.Set;
 import javafx.util.Pair;
@@ -26,20 +21,29 @@ import javafx.util.Pair;
  */
 public class PerformBeamSearch {
     public static void run(RecordSet data){
-        QualityMeasure qm = new WeightedRelativeAccuracy(data, new MatchFilter());
+        String[] targets = new String[]{
+            "click_count",
+            "view_count",
+            "pageview_count",
+            "pageping_count",
+            "session_count"
+        };
+        MeanDifferenceModelClass mc = new MeanDifferenceModelClass(targets);
+        NormalizedMeanDifferenceQualityMeasure qm = new NormalizedMeanDifferenceQualityMeasure(data, mc);
         Map<String, Set<String>> attrvals = data.getAttributeValues();
-        attrvals.remove("match");
-        attrvals.remove("decision");
-        attrvals.remove("decision_o");
-        attrvals.remove("has_null");
+        for(String t: targets){
+            attrvals.remove(t);
+        }
+        attrvals.remove("user_id");
         FilterGenerator fg = new AttributeEqualsFilterGenerator(attrvals);
-        Constraints c = new NoDuplicatesConstraint();
+        Constraints c = new SetSizeConstraint(data, 25);
         
-        MaxSizePriorityQueue<Pair<Float,Filter>> r = BeamSearch.beamSearch(qm, fg, 5, 2, 10, c);
+        MaxSizePriorityQueue<Pair<Float,Filter>> r = BeamSearch.beamSearch(qm, fg, 10, 3, 10, c);
         while(!r.isEmpty())
         {
             Pair<Float, Filter> p = r.pollLast();
-            System.out.println("\n=======\nScore: " + String.valueOf(p.getKey()) + " \n"+p.getValue().toString());
+            System.out.println("\n=======Set size:" + String.valueOf(RecordSet.filter(data, p.getValue()).getRecords().size()) +  "\nScore: " + String.valueOf(p.getKey()) + " \n"+p.getValue().toString());
+            qm.print(p.getValue());
             
         }
     }
