@@ -3,14 +3,18 @@ package HW3;
 
 import HW2.MatchFilter;
 import data.AttributeEqualsFilterGenerator;
+import data.AttributeFilter;
 import data.BeamSearch;
 import data.Constraints;
 import data.Filter;
 import data.FilterGenerator;
+import data.LinkedFilter;
 import data.MaxSizePriorityQueue;
 import data.LooseConstraints;
+import data.NoDuplicatesConstraint;
 import data.QualityMeasure;
 import data.RecordSet;
+import data.Unfiltered;
 import data.WeightedRelativeAccuracy;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +33,8 @@ public class PerformBeamSearch {
         attrvals.remove("decision_o");
         attrvals.remove("has_null");
         FilterGenerator fg = new AttributeEqualsFilterGenerator(attrvals);
-        Constraints c = new LooseConstraints();
+        Constraints c = new NoDuplicatesConstraint();
+        
         MaxSizePriorityQueue<Pair<Float,Filter>> r = BeamSearch.beamSearch(qm, fg, 5, 2, 10, c);
         while(!r.isEmpty())
         {

@@ -58,7 +58,7 @@ class FloatFilterComparator implements Comparator<Pair<Float, Filter>>{
     @Override
     public int compare(Pair<Float, Filter> o1, Pair<Float, Filter> o2) {
         float dkey = o1.getKey() - o2.getKey();
-        if(dkey < 0){
+        if(dkey < 0.0f){
             return -1;
         } else {
             return 1;
