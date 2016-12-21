@@ -26,10 +26,16 @@ public class PerformBeamSearch {
             attrvals.remove(t);
         }
         attrvals.remove("user_id");
-        FilterGenerator fg = new AttributeEqualsFilterGenerator(attrvals);
-        Constraints c = new SetSizeConstraint(data, 25);
+        attrvals.remove("view_height");
+        attrvals.remove("view_depth");
+        attrvals.remove("pageping_count");
 
-        MaxSizePriorityQueue<Pair<Float,Filter>> r = BeamSearch.beamSearch(qm, fg, 10, 5, 10, c);
+        
+        
+        FilterGenerator fg = new AttributeEqualsFilterGenerator(attrvals);
+        Constraints c = new SetSizeConstraint(data, 75);
+
+        MaxSizePriorityQueue<Pair<Float,Filter>> r = BeamSearch.beamSearch(qm, fg, 10, 4, 10, c);
         while(!r.isEmpty())
         {
             Pair<Float, Filter> p = r.pollLast();
