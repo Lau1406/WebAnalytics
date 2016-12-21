@@ -1,10 +1,7 @@
 
 import HW3.PerformBeamSearch;
-import data.AttributeEqualsFilterGenerator;
-import data.BeamSearch;
 import data.Importer;
 import data.RecordSet;
-import data.Unfiltered;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -29,7 +26,7 @@ public class Main {
         switch (identifier) {
             case "3":
                 //BeamSearch.beamSearch(recordSet, null, identifier, 1, 1, 3, null);
-                this.importData("data/hw3/dataset_java_readable.csv",true);
+                this.importData("data/hw3/dataset_new_java_readable.csv",true);
                 PerformBeamSearch.run(this.recordSet);
                 break;
             case "2.1a":
@@ -71,7 +68,7 @@ public class Main {
         exercise(identifier);
     }
 
-    private void importData(String path,boolean doPrintToConsole) {
+    private void importData(String path, boolean doPrintToConsole) {
         Importer importer = new Importer();
 
         long startTime = System.nanoTime();

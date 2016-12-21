@@ -28,7 +28,7 @@ public class LinkedFilter extends Filter{
     public void setNextFilter(Filter nextFilter) {
         this.nextFilter = nextFilter;
     }
-    
+
 
     @Override
     public boolean filterRecord(Record record) {
@@ -39,7 +39,7 @@ public class LinkedFilter extends Filter{
         }
         return false;
     }
-    
+
     @Override
     public String toString(){
         return "First: " + this.filter + "\nSecond: " + String.valueOf(this.nextFilter) +"\n";

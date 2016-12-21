@@ -1,8 +1,9 @@
 package data;
 
+import javafx.util.Pair;
+
 import java.util.Comparator;
 import java.util.LinkedList;
-import javafx.util.Pair;
 
 public class BeamSearch {
     /**
@@ -39,8 +40,20 @@ public class BeamSearch {
                     float q = qm.getScore(f);
                     if(Float.isNaN(q)){
                         System.out.println("Nan for " + String.valueOf(f));
-                    } else if(constraints.satisfy(f)){
-                        resultSet.add(new Pair<>(q, f));
+                    } else if (constraints.satisfy(f)){
+                        boolean iAlreadyHaveAResultWithTheEXACTSameFloatingPointScoreSoIThinkTheseAreEqualSoIWillSkipThisResult = false;
+
+                        for (Pair<Float, Filter> result : resultSet) {
+                            if (result.getKey() == q) {
+                                iAlreadyHaveAResultWithTheEXACTSameFloatingPointScoreSoIThinkTheseAreEqualSoIWillSkipThisResult = true;
+                                break;
+                            }
+                        }
+
+                        if (!iAlreadyHaveAResultWithTheEXACTSameFloatingPointScoreSoIThinkTheseAreEqualSoIWillSkipThisResult) {
+                            resultSet.add(new Pair<>(q, f));
+                        }
+
                         beam.add(new Pair<>(q,f));
                     }
                     System.out.println(resultSet.size() + " Level: " + String.valueOf(level) + " width: " + String.valueOf(candidateQueue.size()) + " - " + String.valueOf(i++) + "/" + String.valueOf(filtersfromseed.length));
