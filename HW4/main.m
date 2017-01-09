@@ -2,17 +2,27 @@ G = load_data(0);
 num = get_data_size(0);
 x = pagerank(G, num, 0);
 plot(x);
-%disp(cmp_evolution(0,0,0,0,1));
 
 function cmp_score = cmp_evolution(dataset_nr, pagerank_algorithm_nr, cmp_algorithm_nr, evolve_type, evolve_strength)
     G = load_data(dataset_nr);
     num = get_data_size(dataset_nr);
     G_evo = evolve(G, num, evolve_strength, evolve_type);
     baseline = pagerank(G, num, pagerank_algorithm_nr);
+    %todo: use previously computed pagerank
     ranking = pagerank(G_evo, num, pagerank_algorithm_nr);
     cmp_score = cmp_page_rank(baseline, ranking, cmp_algorithm_nr);
 end
 
+function data = stub_data(dataset_nr)
+    data = sparse([0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0]);
+    
+    data(3,7) = 1;
+    data(7,2) = 1;
+    data(3,2) = 1;
+    data(7,3) = 1;
+    data(2,3) = 1;
+    data(4,3) = 1;
+end
 function data = load_data(dataset_nr)
     A = load('transition.txt', '-ascii');
     i = A(:,1);
