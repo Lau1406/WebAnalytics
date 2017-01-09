@@ -1,9 +1,10 @@
 function G_evo = evolve(G_org, intensity, evolve_type)
-    G_org = stub_data(0);
     if evolve_type == 0
         G_evo = uniform_remove_edges(G_org, intensity);
     elseif evolve_type == 1
         G_evo = uniform_remove_nodes(G_org, intensity);
+    elseif evolve_type == 3
+        G_evo = weighted_remove_edge(G_org, intensity, 'edge_degree');
     end
 end
 
@@ -44,11 +45,41 @@ function G_evo = uniform_remove_nodes(G_org, num_nodes)
         num = num - 1;
     end
 end
+
+function G_evo = weighted_remove_edge(G_org, num_nodes, weigher)
+    G_evo = G_org;
+    num = size(G_evo,1);
+    for n = num:-1:(num + 1 - num_nodes)
+        nodes = 1:n;
+        % add realmin to prevent all 0 items
+        weights = arrayfun(@(x) feval(weigher, G_evo, x) + realmin, nodes);
+        node = randsample(nodes, 1, true, weights);
+        disp(node);
+        G_evo(node, :) = [];
+        G_evo(:, node) = [];
+    end
+end
+
+function weight = incoming_edge_degree(G, i)
+    weight = full(sum(G(:,i)));
+end
+function weight = outgoing_edge_degree(G, i)
+    weight = full(sum(G(i,:)));
+end
+function weight = edge_degree(G, i)
+    weight = incoming_edge_degree(G, i) + outgoing_edge_degree(G, i);
+end
+
 function data = stub_data(dataset_nr)
     data = sparse([0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0]);
     
     data(3,7) = 1;
     data(7,2) = 1;
+    data(1,2) = 1;
+    data(2,2) = 1;
+    data(3,2) = 1;
+    data(5,2) = 1;
+    data(4,2) = 1;
     data(3,2) = 1;
     data(7,3) = 1;
     data(2,3) = 1;
