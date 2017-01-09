@@ -1,10 +1,11 @@
-function G_evo = evolve(G_org, num, intensity, evolve_type)
+function G_evo = evolve(G_org, intensity, evolve_type)
     if evolve_type == 0
-        G_evo = uniform_remove_edges(G_org, num, intensity);
+        G_evo = uniform_remove_edges(G_org, intensity);
     end
 end
 
-function G_evo = uniform_remove_edges(G_org, num, num_edges)
+function G_evo = uniform_remove_edges(G_org, num_edges)
+    num = size(G_org,1);
     G_evo = G_org;
     nof_edges = sum(sum(G_evo));
     edges_c = sum(G_evo);
@@ -27,5 +28,16 @@ function G_evo = uniform_remove_edges(G_org, num, num_edges)
         G_evo(ii,j) = 0;
         edges_c(j) = edges_c(j) - 1;
         nof_edges = nof_edges - 1;
+    end
+end
+
+function G_evo = uniform_remove_nodes(G_org, num_nodes)
+    num = size(G_org,1);
+    G_evo = G_org;
+    for i = 1:num_nodes
+        r = floor(num * rand) + 1;
+        G_evo([r],:) = [];
+        G_evo(:,[r]) = [];
+        num = num - 1;
     end
 end
