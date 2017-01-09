@@ -1,4 +1,5 @@
 function G_evo = evolve(G_org, intensity, evolve_type)
+    G_org = stub_data(0);
     if evolve_type == 0
         G_evo = uniform_remove_edges(G_org, intensity);
     elseif evolve_type == 1
@@ -38,8 +39,8 @@ function G_evo = uniform_remove_nodes(G_org, num_nodes)
     G_evo = G_org;
     for i = 1:num_nodes
         r = floor(num * rand) + 1;
-        G_evo([r],:) = [];
-        G_evo(:,[r]) = [];
+        G_evo(r,:) = [];
+        G_evo(:,r) = [];
         num = num - 1;
     end
 end
