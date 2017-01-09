@@ -1,6 +1,8 @@
 function G_evo = evolve(G_org, intensity, evolve_type)
     if evolve_type == 0
         G_evo = uniform_remove_edges(G_org, intensity);
+    elseif evolve_type == 1
+        G_evo = uniform_remove_nodes(G_org, intensity);
     end
 end
 
@@ -40,4 +42,14 @@ function G_evo = uniform_remove_nodes(G_org, num_nodes)
         G_evo(:,[r]) = [];
         num = num - 1;
     end
+end
+function data = stub_data(dataset_nr)
+    data = sparse([0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0]);
+    
+    data(3,7) = 1;
+    data(7,2) = 1;
+    data(3,2) = 1;
+    data(7,3) = 1;
+    data(2,3) = 1;
+    data(4,3) = 1;
 end
