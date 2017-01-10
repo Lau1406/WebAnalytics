@@ -1,5 +1,5 @@
 G = load_data(0);
-G = evolve(G, 100, 3);
+%G = evolve(G, 100, 2);
 x = pagerank(G, 0);
 plot(x);
 

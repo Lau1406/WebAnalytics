@@ -3,8 +3,10 @@ function G_evo = evolve(G_org, intensity, evolve_type)
         G_evo = uniform_remove_edges(G_org, intensity);
     elseif evolve_type == 1
         G_evo = uniform_remove_nodes(G_org, intensity);
+    elseif evolve_type == 2
+        G_evo = weighted_remove_edges(G_org, intensity, 'weigh_edge_node_edge_degree');
     elseif evolve_type == 3
-        G_evo = weighted_remove_edge(G_org, intensity, 'edge_degree');
+        G_evo = weighted_remove_nodes(G_org, intensity, 'edge_degree');
     end
 end
 
@@ -46,7 +48,40 @@ function G_evo = uniform_remove_nodes(G_org, num_nodes)
     end
 end
 
-function G_evo = weighted_remove_edge(G_org, num_nodes, weigher)
+function G_evo = weighted_remove_edges(G_org, num_edges, weigher)
+    G_evo = G_org;
+    num = size(G_evo, 1);
+    e_x = [];
+    e_y = [];
+    e_w = [];
+    n = 1;
+    for i = 1:num
+        for j = 1:num
+            if G_evo(i,j) == 1
+                e_x(n) = i;
+                e_y(n) = j;
+                e_w(n) = feval(weigher, G_evo, i, j);
+                n = n + 1;
+            end
+        end
+    end
+    
+    for i = 1:num_edges
+        n = n - 1;
+        edges = 1:n;
+        e = randsample(edges, 1, true, e_w);
+        G_evo(e_x(e),e_y(e)) = 0;
+        e_x(e) = [];
+        e_y(e) = [];
+        e_w(e) = [];
+    end
+end
+
+function weight = weigh_edge_node_edge_degree(G, i, j)
+    weight = edge_degree(G,i) + edge_degree(G,j);
+end
+
+function G_evo = weighted_remove_nodes(G_org, num_nodes, weigher)
     G_evo = G_org;
     num = size(G_evo,1);
     for n = num:-1:(num + 1 - num_nodes)
