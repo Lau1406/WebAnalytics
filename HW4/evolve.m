@@ -1,12 +1,14 @@
-function G_evo = evolve(G_org, intensity, evolve_type)
+function [G_evo, ranking_evo] = evolve(G_org, intensity, ranking_org, evolve_type)
     if evolve_type == 0
-        G_evo = uniform_remove_edges(G_org, intensity);
+        G_evo = uniform_remove_edges(G_org, intensity, ranking_org);
+        ranking_evo = ranking_org;
     elseif evolve_type == 1
-        G_evo = uniform_remove_nodes(G_org, intensity);
+        [G_evo, ranking_evo] = uniform_remove_nodes(G_org, intensity, ranking_org);
     elseif evolve_type == 2
-        G_evo = weighted_remove_edges(G_org, intensity, 'weigh_edge_node_edge_degree');
+        G_evo = weighted_remove_edges(G_org, intensity, ranking_org, 'weigh_edge_node_edge_degree');
+        ranking_evo = ranking_org;
     elseif evolve_type == 3
-        G_evo = weighted_remove_nodes(G_org, intensity, 'edge_degree');
+        [G_evo, ranking_evo] = weighted_remove_nodes(G_org, intensity, 'edge_degree', ranking_org);
     end
 end
 
@@ -37,13 +39,15 @@ function G_evo = uniform_remove_edges(G_org, num_edges)
     end
 end
 
-function G_evo = uniform_remove_nodes(G_org, num_nodes)
+function [G_evo, ranking_evo] = uniform_remove_nodes(G_org, num_nodes, ranking_org)
+    ranking_evo = ranking_org;
     num = size(G_org,1);
     G_evo = G_org;
     for i = 1:num_nodes
         r = floor(num * rand) + 1;
         G_evo(r,:) = [];
         G_evo(:,r) = [];
+        ranking_evo(r) = [];
         num = num - 1;
     end
 end
@@ -81,7 +85,8 @@ function weight = weigh_edge_node_edge_degree(G, i, j)
     weight = edge_degree(G,i) + edge_degree(G,j);
 end
 
-function G_evo = weighted_remove_nodes(G_org, num_nodes, weigher)
+function [G_evo, ranking_evo]  = weighted_remove_nodes(G_org, num_nodes, weigher, ranking_org)
+    ranking_evo = ranking_org;
     G_evo = G_org;
     num = size(G_evo,1);
     for n = num:-1:(num + 1 - num_nodes)
@@ -89,9 +94,9 @@ function G_evo = weighted_remove_nodes(G_org, num_nodes, weigher)
         % add realmin to prevent all 0 items
         weights = arrayfun(@(x) feval(weigher, G_evo, x) + realmin, nodes);
         node = randsample(nodes, 1, true, weights);
-        disp(node);
         G_evo(node, :) = [];
         G_evo(:, node) = [];
+        ranking_evo(node) = [];
     end
 end
 

@@ -1,5 +1,6 @@
 G = load_data(0);
-%G = evolve(G, 100, 2);
+baseline = pagerank(G, 0);
+[G, baseline] = evolve(G, 100, baseline, 3);
 x = pagerank(G, 0);
 plot(x);
 
@@ -45,4 +46,12 @@ end
 
 function cmp = cmp_page_rank(baselineranking, ranking, cmp_algorithm_nr)
     cmp = 1;
+end
+
+
+function data = stub_data(dataset_nr)
+    data = sparse([0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0]);
+    
+    data(3,7) = 1;
+    data(7,3) = 1;
 end
