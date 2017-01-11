@@ -44,18 +44,18 @@ function pagevector = pagerank(G, pagerank_algorithm_nr)
     D = sparse(k,k,1./c(k),num,num);
     e = ones(num,1);
 
+    
     % adding the teleport
     p = 0.85;
     z = ((1-p)*(c~=0)+(c==0))/num;
-    A = p*G*D+e*z;
+    G = p*G*D;
 
     x = e/num;
     oldx = zeros(num,1);
     while norm(x - oldx) > .00001
         oldx = x;
-        x = A*x;
+        x = G*x + e*(z*x);
     end
-
     pagevector = x/sum(x);
 end
 
@@ -63,13 +63,8 @@ function cmp = cmp_page_rank(pageranks_base, pageranks, cmp_algorithm_nr)
     if cmp_algorithm_nr == 0
         error_rank = 0;
         
-        % we need to sort the pagerank lists and create ranking lists
-        sort(pageranks);
-        sort(pageranks_base);
-        
-        [~,~,ranking] = unique(pageranks * -1); % -1 flips the ranking order, 1 being the highest
-        [~,~,ranking_base] = unique(pageranks_base * -1);
-        
+        ranking = rank_pagerank(pageranks);
+        ranking_base = rank_pagerank(pageranks_base);
         
         for i=1:length(pageranks)
             rank = ranking(i);
