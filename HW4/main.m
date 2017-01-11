@@ -1,19 +1,38 @@
-cmp_evolution(0, 0, 0, 0, 100);
 
-function cmp_score = cmp_evolution(dataset_nr, pagerank_algorithm_nr, cmp_algorithm_nr, evolve_type, evolve_strength)
-    G = load_data(dataset_nr);
-    G_evo = evolve(G, evolve_strength, evolve_type);
-    baseline = pagerank(G, pagerank_algorithm_nr);
-    %todo: use previously computed pagerank
-    ranking = pagerank(G_evo, pagerank_algorithm_nr);
-    cmp_score = cmp_page_rank(baseline, ranking, cmp_algorithm_nr);
+test_dataset(2);
+
+
+function test_dataset(datanr)
+    G = load_data(datanr);
+    baseline = pagerank(G, 0);
+    nof_nodes = size(G,1);
+    nof_edges = sum(G);
+    scores = test_evolve(G, baseline, floor(nof_edges/10),0);
+    dlmwrite(strcat('10procent_of_edges_uniformly_dataset_', num2str(datanr)), scores);
 end
 
+function scores = test_evolve(G, baseline, intensity, algorithm_nr)
+    experiment_iterations = 1;
+    scores = zeros(1,experiment_iterations);
+    for i = 1:experiment_iterations
+        [G_evo, baseline_evo] = evolve(G, intensity, baseline, algorithm_nr);
+        rank = pagerank(G_evo, 0);
+        %todo: use previously computed pagerank
+        scores(i) = cmp_page_rank(baseline_evo, rank, 1);
+    end
+end 
+
 function data = load_data(dataset_nr)
-    A = load('transition.txt', '-ascii');
+    if dataset_nr == 0
+        A = load('transition.txt', '-ascii');
+    elseif dataset_nr == 1
+        A = load('soc-hamsterster.edges', '-ascii');
+    else
+        A = load('ego-facebook.edges', '-ascii');
+    end
     i = A(:,1);
     j = A(:,2);
-    num = 1490;
+    num = max(max(i),max(j));
 
     data = sparse(i,j,1,num,num);
 end
@@ -51,7 +70,6 @@ function cmp = cmp_page_rank(pageranks_base, pageranks, cmp_algorithm_nr)
         [~,~,ranking] = unique(pageranks * -1); % -1 flips the ranking order, 1 being the highest
         [~,~,ranking_base] = unique(pageranks_base * -1);
         
-        disp(ranking);
         
         for i=1:length(pageranks)
             rank = ranking(i);

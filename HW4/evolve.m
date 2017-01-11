@@ -1,11 +1,11 @@
 function [G_evo, ranking_evo] = evolve(G_org, intensity, ranking_org, evolve_type)
     if evolve_type == 0
-        G_evo = uniform_remove_edges(G_org, intensity, ranking_org);
+        G_evo = uniform_remove_edges(G_org, intensity);
         ranking_evo = ranking_org;
     elseif evolve_type == 1
         [G_evo, ranking_evo] = uniform_remove_nodes(G_org, intensity, ranking_org);
     elseif evolve_type == 2
-        G_evo = weighted_remove_edges(G_org, intensity, ranking_org, 'weigh_edge_node_edge_degree');
+        G_evo = weighted_remove_edges(G_org, intensity, 'weigh_edge_node_edge_degree');
         ranking_evo = ranking_org;
     elseif evolve_type == 3
         [G_evo, ranking_evo] = weighted_remove_nodes(G_org, intensity, 'edge_degree', ranking_org);
