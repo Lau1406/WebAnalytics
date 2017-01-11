@@ -52,32 +52,45 @@ function [G_evo, ranking_evo] = uniform_remove_nodes(G_org, num_nodes, ranking_o
     end
 end
 
-function G_evo = weighted_remove_edges(G_org, num_edges, weigher)
-    G_evo = G_org;
-    num = size(G_evo, 1);
-    e_x = [];
-    e_y = [];
-    e_w = [];
-    n = 1;
-    for i = 1:num
-        for j = 1:num
-            if G_evo(i,j) == 1
-                e_x(n) = i;
-                e_y(n) = j;
-                e_w(n) = feval(weigher, G_evo, i, j);
-                n = n + 1;
+function [e_x, e_y, e_w] = map_matrix(G, weigher)
+    global ce_x
+    global ce_y
+    global ce_w
+    global hashlast
+    hash = strcat(num2str(size(G, 1)), '-',num2str(sum(sum(G))), weigher);
+    if(isempty(hashlast) || not(strcmp(hash,hashlast)))
+        num = size(G, 1);
+        n = 1;  
+        for i = 1:num
+            for j = 1:num
+                if G(i,j) == 1
+                    ce_x(n) = i;
+                    ce_y(n) = j;
+                    ce_w(n) = feval(weigher, G, i, j);
+                    n = n + 1;
+                end
             end
         end
+        hashlast = hash;
     end
-    
+    e_x = ce_x;
+    e_y = ce_y;
+    e_w = ce_w;
+end
+
+function G_evo = weighted_remove_edges(G_org, num_edges, weigher)
+    G_evo = G_org;
+    [e_x, e_y, e_w] = map_matrix(G_evo, weigher);
+    n = size(e_x);
+    n = n(2);
     for i = 1:num_edges
-        n = n - 1;
         edges = 1:n;
         e = randsample(edges, 1, true, e_w);
         G_evo(e_x(e),e_y(e)) = 0;
         e_x(e) = [];
         e_y(e) = [];
         e_w(e) = [];
+        n = n - 1;
     end
 end
 

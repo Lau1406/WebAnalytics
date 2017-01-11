@@ -1,5 +1,6 @@
 
-test_dataset(2);
+test_dataset(0);
+test_dataset(1);
 
 
 function test_dataset(datanr)
@@ -8,17 +9,39 @@ function test_dataset(datanr)
     nof_nodes = size(G,1);
     nof_edges = sum(G);
     scores = test_evolve(G, baseline, floor(nof_edges/10),0);
-    dlmwrite(strcat('10procent_of_edges_uniformly_dataset_', num2str(datanr)), scores);
+    name = strcat('10procent_of_edges_uniformly_dataset_', num2str(datanr));
+    dlmwrite(name, scores);
+    disp(name);
+    scores = test_evolve(G, baseline, floor(nof_nodes/10),1);
+    name = strcat('10procent_of_nodes_uniformly_dataset_', num2str(datanr));
+    dlmwrite(name, scores);
+    disp(name);
+    scores = test_evolve(G, baseline, floor(nof_edges/10),2);
+    name = strcat('10procent_of_edges_weighted_dataset_', num2str(datanr));
+    dlmwrite(name, scores);
+    disp(name);
+    scores = test_evolve(G, baseline, floor(nof_nodes/10),3);
+    name = strcat('10procent_of_nodes_weighted_dataset_', num2str(datanr));
+    dlmwrite(name, scores);
+    disp(name);
 end
 
 function scores = test_evolve(G, baseline, intensity, algorithm_nr)
-    experiment_iterations = 1;
+    experiment_iterations = 500;
     scores = zeros(1,experiment_iterations);
     for i = 1:experiment_iterations
+        fprintf ('%d/%d', i,experiment_iterations);
         [G_evo, baseline_evo] = evolve(G, intensity, baseline, algorithm_nr);
         rank = pagerank(G_evo, 0);
         %todo: use previously computed pagerank
         scores(i) = cmp_page_rank(baseline_evo, rank, 1);
+        for j=0:log10(i)
+            fprintf('\b'); % delete previous counter display
+        end
+        for j=0:log10(experiment_iterations)
+            fprintf('\b'); % delete previous counter display
+        end
+        fprintf('\b');
     end
 end 
 
