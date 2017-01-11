@@ -25,18 +25,18 @@ function pagevector = pagerank(G, pagerank_algorithm_nr)
     D = sparse(k,k,1./c(k),num,num);
     e = ones(num,1);
 
+    
     % adding the teleport
     p = 0.85;
     z = ((1-p)*(c~=0)+(c==0))/num;
-    A = p*G*D+e*z;
+    G = p*G*D;
 
     x = e/num;
     oldx = zeros(num,1);
     while norm(x - oldx) > .00001
         oldx = x;
-        x = A*x;
+        x = G*x + e*(z*x);
     end
-
     pagevector = x/sum(x);
 end
 
