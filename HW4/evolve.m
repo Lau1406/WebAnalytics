@@ -1,11 +1,11 @@
-function [G_evo, ranking_evo] = evolve(G_org, intensity, ranking_org, evolve_type)
+function [G_evo, ranking_evo] = evolve(G_org, intensity, ranking_org, evolve_type, iteration)
     if evolve_type == 0
         G_evo = uniform_remove_edges(G_org, intensity);
         ranking_evo = ranking_org;
     elseif evolve_type == 1
         [G_evo, ranking_evo] = uniform_remove_nodes(G_org, intensity, ranking_org);
     elseif evolve_type == 2
-        G_evo = weighted_remove_edges(G_org, intensity, 'weigh_edge_node_edge_degree');
+        G_evo = weighted_remove_edges(G_org, intensity, 'weigh_edge_node_edge_degree', iteration);
         ranking_evo = ranking_org;
     elseif evolve_type == 3
         [G_evo, ranking_evo] = weighted_remove_nodes(G_org, intensity, 'edge_degree', ranking_org);
@@ -52,13 +52,11 @@ function [G_evo, ranking_evo] = uniform_remove_nodes(G_org, num_nodes, ranking_o
     end
 end
 
-function [e_x, e_y, e_w] = map_matrix(G, weigher)
+function [e_x, e_y, e_w] = map_matrix(G, weigher, iteration)
     global ce_x
     global ce_y
     global ce_w
-    global hashlast
-    hash = strcat(num2str(size(G, 1)), '-',num2str(sum(sum(G))), weigher);
-    if(isempty(hashlast) || not(strcmp(hash,hashlast)))
+    if(iteration == 1)
         num = size(G, 1);
         n = 1;  
         for i = 1:num
@@ -71,16 +69,16 @@ function [e_x, e_y, e_w] = map_matrix(G, weigher)
                 end
             end
         end
-        hashlast = hash;
     end
     e_x = ce_x;
     e_y = ce_y;
     e_w = ce_w;
 end
 
-function G_evo = weighted_remove_edges(G_org, num_edges, weigher)
+function G_evo = weighted_remove_edges(G_org, num_edges, weigher, iteration)
+    
     G_evo = G_org;
-    [e_x, e_y, e_w] = map_matrix(G_evo, weigher);
+    [e_x, e_y, e_w] = map_matrix(G_evo, weigher, iteration);
     n = size(e_x);
     n = n(2);
     for i = 1:num_edges
