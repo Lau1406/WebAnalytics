@@ -18,8 +18,8 @@ function test_dataset(datanr)
     dlmwrite(name, scores);
     name = strcat('10procent_of_edges_weighted_dataset_', num2str(datanr));
     disp(name);
-    %scores = test_evolve(G, baseline, floor(nof_edges/10),2);
-    %dlmwrite(name, scores);
+    scores = test_evolve(G, baseline, floor(nof_edges/10),2);
+    dlmwrite(name, scores);
     name = strcat('10procent_of_nodes_weighted_dataset_', num2str(datanr));
     disp(name);
     scores = test_evolve(G, baseline, floor(nof_nodes/10),3);
