@@ -1,8 +1,4 @@
-G = load_data(0);
-baseline = pagerank(G, 0);
-[G, baseline] = evolve(G, 100, baseline, 3);
-x = pagerank(G, 0);
-plot(x);
+cmp_evolution(0, 0, 0, 0, 100);
 
 function cmp_score = cmp_evolution(dataset_nr, pagerank_algorithm_nr, cmp_algorithm_nr, evolve_type, evolve_strength)
     G = load_data(dataset_nr);
@@ -44,14 +40,35 @@ function pagevector = pagerank(G, pagerank_algorithm_nr)
     pagevector = x/sum(x);
 end
 
-function cmp = cmp_page_rank(baselineranking, ranking, cmp_algorithm_nr)
-    cmp = 1;
-end
-
-
-function data = stub_data(dataset_nr)
-    data = sparse([0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0]);
-    
-    data(3,7) = 1;
-    data(7,3) = 1;
+function cmp = cmp_page_rank(pageranks_base, pageranks, cmp_algorithm_nr)
+    if cmp_algorithm_nr == 0
+        error_rank = 0;
+        
+        % we need to sort the pagerank lists and create ranking lists
+        sort(pageranks);
+        sort(pageranks_base);
+        
+        [~,~,ranking] = unique(pageranks * -1); % -1 flips the ranking order, 1 being the highest
+        [~,~,ranking_base] = unique(pageranks_base * -1);
+        
+        disp(ranking);
+        
+        for i=1:length(pageranks)
+            rank = ranking(i);
+            rank_base = ranking_base(i);
+            
+            error_rank = error_rank + ( abs(rank - rank_base) / rank_base );
+        end
+        cmp = error_rank;
+    elseif cmp_algorithm_nr == 1
+        error_value = 0;
+        
+        for i=1:length(pageranks)
+            pgrank = pageranks(i);
+            pgrank_base = pageranks_base(i);
+            
+            error_value = error_value + ( abs(pgrank - pgrank_base) / pgrank_base );
+        end
+        cmp = error_value;
+    end
 end
