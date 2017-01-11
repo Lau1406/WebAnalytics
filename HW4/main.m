@@ -44,14 +44,8 @@ function cmp = cmp_page_rank(pageranks_base, pageranks, cmp_algorithm_nr)
     if cmp_algorithm_nr == 0
         error_rank = 0;
         
-        % we need to sort the pagerank lists and create ranking lists
-        sort(pageranks);
-        sort(pageranks_base);
-        
-        [~,~,ranking] = unique(pageranks * -1); % -1 flips the ranking order, 1 being the highest
-        [~,~,ranking_base] = unique(pageranks_base * -1);
-        
-        disp(ranking);
+        ranking = rank_pagerank(pageranks);
+        ranking_base = rank_pagerank(pageranks_base);
         
         for i=1:length(pageranks)
             rank = ranking(i);
